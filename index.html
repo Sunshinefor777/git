@@ -1,0 +1,167 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>煤矿顶板灾变智能预警与可视化决策系统</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <aside class="sidebar">
+        <div class="brand">
+          <span class="brand-mark">DT</span>
+          <div>
+            <strong>顶板灾变预警</strong>
+            <span>数字孪生决策系统</span>
+          </div>
+        </div>
+
+        <nav class="nav-list" aria-label="主导航">
+          <button class="nav-item active" data-section="overview">总览</button>
+          <button class="nav-item" data-section="sensing">透明感知</button>
+          <button class="nav-item" data-section="warning">智能预警</button>
+          <button class="nav-item" data-section="twin">数字孪生</button>
+          <button class="nav-item" data-section="workflow">闭环处置</button>
+        </nav>
+
+        <div class="sidebar-footer">
+          <span>试点矿井</span>
+          <strong>贵州喀斯特示范矿</strong>
+        </div>
+      </aside>
+
+      <main class="main">
+        <header class="topbar">
+          <div>
+            <p class="eyebrow">云-边-端协同运行</p>
+            <h1>基于数字孪生的煤矿顶板灾变智能预警与可视化决策系统</h1>
+          </div>
+          <div class="topbar-actions">
+            <div class="status-pill">
+              <span class="status-dot"></span>
+              数据在线
+            </div>
+            <button class="primary-action" id="simulateAlert">模拟预警</button>
+          </div>
+        </header>
+
+        <section class="role-switch" aria-label="三端角色切换">
+          <button class="role-button active" data-role="enterprise">企业端</button>
+          <button class="role-button" data-role="expert">智库端</button>
+          <button class="role-button" data-role="regulator">监管端</button>
+        </section>
+
+        <section class="kpi-grid" id="overview">
+          <article class="metric-card">
+            <span>综合预警指数</span>
+            <strong id="riskIndex">0.68</strong>
+            <small>橙色临界，较 30 分钟前 +0.08</small>
+          </article>
+          <article class="metric-card">
+            <span>在线传感器</span>
+            <strong>128</strong>
+            <small>应力 42 / 位移 36 / 微震 22 / 光纤 28</small>
+          </article>
+          <article class="metric-card">
+            <span>平均响应时间</span>
+            <strong>4.6 分</strong>
+            <small>闭环处置达成率 94%</small>
+          </article>
+          <article class="metric-card danger">
+            <span>当前最高等级</span>
+            <strong id="highestLevel">橙色</strong>
+            <small>3106 工作面回风巷</small>
+          </article>
+        </section>
+
+        <section class="content-grid">
+          <div class="twin-panel" id="twin">
+            <div class="panel-heading">
+              <div>
+                <p class="eyebrow">Digital Twin</p>
+                <h2>矿井三维孪生态势</h2>
+              </div>
+              <div class="segmented-control">
+                <button class="active" data-layer="stress">应力场</button>
+                <button data-layer="displacement">位移场</button>
+                <button data-layer="microseismic">微震</button>
+              </div>
+            </div>
+            <canvas id="mineCanvas" width="980" height="560" aria-label="矿井数字孪生场景"></canvas>
+          </div>
+
+          <aside class="right-panel" id="warning">
+            <div class="panel-heading compact">
+              <h2>四级预警</h2>
+              <span id="clock">--:--:--</span>
+            </div>
+            <div class="alert-stack" id="alertStack"></div>
+
+            <div class="model-box">
+              <div class="model-row">
+                <span>规则阈值</span>
+                <strong id="ruleScore">0.72</strong>
+              </div>
+              <div class="model-row">
+                <span>多源融合</span>
+                <strong id="fusionScore">0.69</strong>
+              </div>
+              <div class="model-row">
+                <span>时序预测</span>
+                <strong id="forecastScore">0.63</strong>
+              </div>
+              <div class="progress-track">
+                <span id="riskBar"></span>
+              </div>
+            </div>
+          </aside>
+        </section>
+
+        <section class="lower-grid">
+          <article class="data-panel" id="sensing">
+            <div class="panel-heading">
+              <div>
+                <p class="eyebrow">Transparent Sensing</p>
+                <h2>多源透明感知</h2>
+              </div>
+              <label class="toggle">
+                <input type="checkbox" id="liveToggle" checked />
+                <span>实时刷新</span>
+              </label>
+            </div>
+            <div class="sensor-table" id="sensorTable"></div>
+          </article>
+
+          <article class="data-panel">
+            <div class="panel-heading">
+              <div>
+                <p class="eyebrow">Prediction</p>
+                <h2>趋势预测</h2>
+              </div>
+              <div class="range-control">
+                <label for="windowRange">预测窗口</label>
+                <input id="windowRange" type="range" min="1" max="6" value="3" />
+                <span id="windowLabel">3h</span>
+              </div>
+            </div>
+            <canvas id="trendCanvas" width="760" height="260" aria-label="风险趋势曲线"></canvas>
+          </article>
+        </section>
+
+        <section class="workflow-panel" id="workflow">
+          <div class="panel-heading">
+            <div>
+              <p class="eyebrow">Closed Loop</p>
+              <h2>预警处置闭环</h2>
+            </div>
+            <button class="secondary-action" id="completeStep">推进处置</button>
+          </div>
+          <div class="workflow-steps" id="workflowSteps"></div>
+        </section>
+      </main>
+    </div>
+
+    <script src="app.js"></script>
+  </body>
+</html>
